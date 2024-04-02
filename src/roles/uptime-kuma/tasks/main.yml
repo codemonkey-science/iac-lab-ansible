@@ -1,0 +1,38 @@
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Uptime-Kuma Service Install - Set owner, group and permissions for /opt/status to `root:root` and `0770`
+  file:
+    path: /opt/status
+    state: directory
+    owner: root
+    group: root
+    mode: '0770'
+    recurse: yes
+
+- name: Uptime-Kuma Service Install - Ensure /opt/status/upload/ directory exists
+  file:
+    path: /opt/status/upload/
+    state: directory
+
+- name: Uptime-Kuma Service Install - Copy status-service.service to remote host
+  ansible.builtin.copy:
+    src: files/status-service.service
+    dest: /etc/systemd/system/status-service.service
+
+- name: Uptime-Kuma Service Install - Reload systemd manager configuration
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Uptime-Kuma Service Install - Enable and start status service
+  ansible.builtin.systemd:
+    name: status-service
+    enabled: yes
+    state: started
+
+- name: Copy logo.png to /opt/status/upload/logo-1.png on the remote host
+  copy:
+    src: files/logo.png
+    dest: /opt/status/upload/logo-1.png

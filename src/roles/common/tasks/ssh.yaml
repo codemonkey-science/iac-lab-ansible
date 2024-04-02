@@ -1,0 +1,44 @@
+- name: SSH - Ensure public key authentication is enabled
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PubkeyAuthentication'
+    line: 'PubkeyAuthentication yes'
+
+- name: SSH - Disable password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+
+- name: SSH - Prevent root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+
+# - name: SSH - Set new SSH port
+#   lineinfile:
+#     path: /etc/ssh/sshd_config
+#     state: present
+#     regexp: '^#?Port'
+#     line: 'Port 20022'
+
+- name: SSH - Set banner
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^#?Banner'
+    line: 'Banner /etc/issue.net'
+
+- name: SSH - set /etc/issue.net
+  template:
+    src: "files/issue.net"
+    dest: "/etc/issue.net"
+
+- name: Restart SSHD
+  service:
+    name: sshd
+    state: restarted

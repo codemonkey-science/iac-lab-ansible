@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: yes
+  roles:
+  - common
+
+- hosts: lab, proxmox
+  become: yes
+  roles:
+  - common
+  - wazuh-agent
+  - graylog-forwarder
+
+- hosts: auth.east.codemonkey.science
+  become: yes
+  roles:
+  - keycloak
+
+- hosts: cti.east.codemonkey.science
+  become: yes
+  roles:
+  - opencti
+
+- hosts: misp.east.codemonkey.science
+  become: yes
+  roles:
+  - misp
+
+- hosts: sim.east.codemonkey.science
+  become: yes
+  roles:
+  - graylog
+
+- hosts: siem.east.codemonkey.science
+  become: yes
+  roles:
+  - wazuh
+
+- hosts: status.east.codemonkey.science
+  become: yes
+  roles:
+  - uptime-kuma

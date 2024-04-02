@@ -1,0 +1,27 @@
+---
+- name: Wazuh - Verify if the service exists and is running
+  include_tasks: service-check.yml
+
+- name: Wazuh - Verify if the files and folders appear valid
+  include_tasks: folder-check.yml
+
+- name: Wazuh - Verify package dependencies
+  include_tasks: package-dependencies.yml
+
+- name: Wazuh - Configure wazuh user and group
+  include_tasks: user.yml
+
+- block:
+
+  - name: Wazuh - Initialize wazuh from source repo and create certs
+    include_tasks: init.yml
+
+  - name: Wazuh - Establish and start wazuh-service
+    include_tasks: service-install.yml
+
+  when: >
+    not wazuh_service_exists
+    or not wazuh_service_running 
+    or not wazuh_directory.stat.exists 
+    or not wazuh_docker_compose.stat.exists
+    or wazuh_user_added

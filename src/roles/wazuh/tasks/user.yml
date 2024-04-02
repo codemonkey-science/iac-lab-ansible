@@ -1,0 +1,11 @@
+---
+- name: Wazuh User and Group - Ensure user wazuh exists
+  ansible.builtin.user:
+    name: wazuh
+    state: present
+
+- name: Wazuh User and Group - Add wazuh user to docker group
+  ansible.builtin.user:
+    name: wazuh
+    groups: docker
+    append: yes

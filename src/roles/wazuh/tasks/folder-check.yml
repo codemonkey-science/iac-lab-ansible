@@ -1,0 +1,10 @@
+---
+- name: Wazuh Folder - Check if /opt/wazuh/ directory exists
+  ansible.builtin.stat:
+    path: /opt/wazuh/
+  register: wazuh_directory
+
+- name: Wazuh Folder - Check if /opt/wazuh/docker-compose.yml exists
+  ansible.builtin.stat:
+    path: /opt/wazuh/docker-compose.yml
+  register: wazuh_docker_compose

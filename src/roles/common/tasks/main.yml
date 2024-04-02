@@ -1,0 +1,20 @@
+---
+- become: false
+  block:
+    - name: Copy fix-prompts.sh script to remote host
+      ansible.builtin.copy:
+        src: files/fix-prompts.sh
+        dest: /tmp/fix-prompts.sh
+        mode: '0755'
+    - name: Run fix-prompts.sh script
+      ansible.builtin.command:
+        cmd: /tmp/fix-prompts.sh
+        removes: /tmp/fix-prompts.sh
+
+- name: Set timezone to Eastern Time
+  command:
+    cmd: timedatectl set-timezone America/New_York
+
+# SSHD Configuration
+- name: Configure and harden SSH
+  include_tasks: ssh.yaml

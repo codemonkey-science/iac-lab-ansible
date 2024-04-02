@@ -1,0 +1,15 @@
+---
+- name: Wazuh Service Install - Copy wazuh-service.service to remote host
+  ansible.builtin.copy:
+    src: files/wazuh-service.service
+    dest: /etc/systemd/system/wazuh-service.service
+
+- name: Wazuh Service Install - Reload systemd manager configuration
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Wazuh Service Install - Enable and start wazuh service
+  ansible.builtin.systemd:
+    name: wazuh-service
+    enabled: yes
+    state: started

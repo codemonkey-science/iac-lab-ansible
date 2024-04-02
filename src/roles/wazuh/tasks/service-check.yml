@@ -1,0 +1,14 @@
+---
+- name: Wazuh Service Check - Gather facts about all services
+  ansible.builtin.service_facts:
+
+- name: Wazuh Service Check - Check if wazuh service exists
+  set_fact:
+    wazuh_service_exists: "'wazuh-service' in ansible_facts.services"
+
+- name: Wazuh Service Check - Check if wazuh service is running
+  set_fact:
+    wazuh_service_running: >
+      "{{ wazuh_service_exists 
+        and (ansible_facts.services['wazuh-service'] | default({'state': 'stopped'})).state == 'running' 
+        if wazuh_service_exists else false }}"

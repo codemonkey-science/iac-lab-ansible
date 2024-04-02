@@ -1,0 +1,16 @@
+[Unit]
+Description=Uptime-Kuma Docker container
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker stop uptime-kuma
+ExecStartPre=-/usr/bin/docker rm uptime-kuma
+ExecStart=/usr/bin/docker run -d --restart=always \
+    -p 3001:3001 \
+    -v /opt/status:/app/data \
+    --name uptime-kuma \
+    louislam/uptime-kuma:1
+ExecStop=/usr/bin/docker stop uptime-kuma
+
+[Install]
+WantedBy=multi-user.target

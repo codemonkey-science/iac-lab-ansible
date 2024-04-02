@@ -1,0 +1,15 @@
+---
+- name: Wazuh Dependencies - Ensure Docker is installed
+  ansible.builtin.package:
+    name: docker
+    state: present
+  
+- name: Wazuh Dependencies - Ensure Docker Compose is installed
+  ansible.builtin.package:
+    name: docker-compose
+    state: present
+
+- name: Wazuh Dependencies - Ensure git is installed
+  ansible.builtin.package:
+    name: git
+    state: present

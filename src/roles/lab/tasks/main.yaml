@@ -1,0 +1,4 @@
+---
+# APT Configuration
+- name: Configure local APT repositories
+  include_tasks: apt.yaml

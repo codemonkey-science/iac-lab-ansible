@@ -1,0 +1,47 @@
+---
+- name: Wazuh Init - Ensure git is installed
+  apt:
+    name: git
+    state: present
+
+- name: Wazuh Init - Clone the wazuh-docker repository
+  git:
+    repo: 'https://github.com/wazuh/wazuh-docker.git'
+    dest: '/tmp/wazuh-docker'
+    version: 'v4.7.3'
+
+- name: Wazuh Init - Temporarily set owner, group and permissions for /opt/wazuh to `root:root` and `0770`
+  file:
+    path: /opt/wazuh
+    state: directory
+    owner: root
+    group: root
+    mode: '0770'
+    recurse: yes
+
+- name: Wazuh Init - Copy the contents of /single-node/* to /opt/wazuh
+  shell:
+    cmd: cp -r /tmp/wazuh-docker/single-node/* /opt/wazuh/
+
+- name: Wazuh Init - Remove /tmp/wazuh-docker directory
+  file:
+    path: /tmp/wazuh-docker
+    state: absent
+
+- name: Wazuh Init - Remove /opt/wazuh/README.md
+  file:
+    path: /opt/wazuh/README.md
+    state: absent
+
+- name: Wazuh Init - Run certificate generator
+  command:
+    cmd: docker-compose -f /opt/wazuh/generate-indexer-certs.yml run --rm generator
+
+- name: Wazuh Init - Final set owner, group and permissions for /opt/wazuh to `wazuh:wazuh` and `0770`
+  file:
+    path: /opt/wazuh
+    state: directory
+    owner: wazuh
+    group: wazuh
+    mode: '0770'
+    recurse: yes
