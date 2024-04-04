@@ -16,7 +16,7 @@
     state: directory
     owner: root
     group: root
-    mode: '0770'
+    mode: '0777'
     recurse: yes
 
 - name: Wazuh Init - Copy the contents of /single-node/* to /opt/wazuh
@@ -43,5 +43,5 @@
     state: directory
     owner: wazuh
     group: wazuh
-    mode: '0770'
+    mode: '0777'
     recurse: yes
