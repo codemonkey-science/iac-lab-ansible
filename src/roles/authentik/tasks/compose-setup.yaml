@@ -1,0 +1,28 @@
+---
+- name: Copy docker-compose.yml to remote host
+  copy:
+    src: ./files/docker-compose.yml
+    dest: /opt/authentik/docker-compose.yml
+    owner: authentik
+    group: authentik
+    mode: '0644'
+
+- name: Check if PG_PASS exists
+  shell: grep -q 'PG_PASS' /opt/authentik/.env
+  register: pg_pass_exists
+  ignore_errors: yes
+
+- name: Generate PG_PASS secret
+  shell:
+    cmd: echo "PG_PASS=$(openssl rand -base64 36)" >> /opt/authentik/.env
+  when: pg_pass_exists.rc != 0
+
+- name: Check if AUTHENTIK_SECRET_KEY exists
+  shell: grep -q 'AUTHENTIK_SECRET_KEY' /opt/authentik/.env
+  register: authentik_secret_key_exists
+  ignore_errors: yes
+
+- name: Generate AUTHENTIK_SECRET_KEY secret
+  shell:
+    cmd: echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 36)" >> /opt/authentik/.env
+  when: authentik_secret_key_exists.rc != 0

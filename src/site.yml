@@ -14,7 +14,7 @@
 - hosts: auth.east.codemonkey.science
   become: yes
   roles:
-  - keycloak
+  - authentik
 
 - hosts: cti.east.codemonkey.science
   become: yes

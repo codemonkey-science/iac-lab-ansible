@@ -1,0 +1,15 @@
+---
+- name: Check if authentik service is running
+  systemd:
+    name: authentik
+    state: started
+  register: service_status
+  ignore_errors: yes
+
+- name: End playbook if service is already running
+  meta: end_play
+  when: service_status is succeeded
+
+- include_tasks: prereqs.yaml
+- include_tasks: compose-setup.yaml
+- include_tasks: daemon-setup.yaml

@@ -6,7 +6,7 @@ Ansible configuration for the lab.
 
 ![Ansible Logo](docs/images/ansible.png)
 
-This repository contains Ansible playbooks and roles for setting up and managing a lab environment. The configuration includes various services such as Wazuh, Graylog, Keycloak, OpenCTI, MISP, and Uptime Kuma.
+This repository contains Ansible playbooks and roles for setting up and managing a lab environment. The configuration includes various services such as Wazuh, Graylog, Authentik, OpenCTI, MISP, and Uptime Kuma.
 
 ## Overview
 
