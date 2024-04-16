@@ -40,3 +40,8 @@
   become: yes
   roles:
   - uptime-kuma
+
+- hosts: pve1.east.codemonkey.science, pve2.east.codemonkey.science
+  become: yes
+  roles:
+  - proxmox
