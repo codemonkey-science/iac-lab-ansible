@@ -64,7 +64,7 @@ jobs:
     #     working_directory: src
 
     - name: Run Ansible Playbook
-      run: ansible-playbook -i inventory/hosts -u ${{ secrets.DEFAULT_SSH_USER }} site.yml ${{ github.event.inputs.ansible_arguments }} -f 5
+      run: ansible-playbook -i inventory/hosts -u ${{ secrets.DEFAULT_SSH_USER }} site.yml -vvv ${{ github.event.inputs.ansible_arguments }} -f 5
       working-directory: ./src
       env:
         ANSIBLE_BECOME_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
