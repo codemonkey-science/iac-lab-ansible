@@ -1,6 +1,6 @@
 [all]
-pve1.east.codemonkey.science
-pve2.east.codemonkey.science
+#pve1.east.codemonkey.science
+#pve2.east.codemonkey.science
 auth.east.codemonkey.science
 cti.east.codemonkey.science
 misp.east.codemonkey.science
@@ -8,13 +8,13 @@ sim.east.codemonkey.science
 siem.east.codemonkey.science
 status.east.codemonkey.science
 
-[proxmox]
-pve1.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
-pve2.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
+#[proxmox]
+#pve1.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
+#pve2.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
 
 [lab]
-pve1.east.codemonkey.science
-pve2.east.codemonkey.science
+#pve1.east.codemonkey.science
+#pve2.east.codemonkey.science
 auth.east.codemonkey.science
 cti.east.codemonkey.science
 misp.east.codemonkey.science

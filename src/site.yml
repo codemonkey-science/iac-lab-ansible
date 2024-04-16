@@ -4,7 +4,7 @@
   roles:
   - common
 
-- hosts: lab, proxmox
+- hosts: lab #, proxmox
   become: yes
   roles:
   - common
@@ -41,7 +41,7 @@
   roles:
   - uptime-kuma
 
-- hosts: pve1.east.codemonkey.science, pve2.east.codemonkey.science
-  become: yes
-  roles:
-  - proxmox
+# - hosts: pve1.east.codemonkey.science, pve2.east.codemonkey.science
+#   become: yes
+#   roles:
+#   - proxmox
