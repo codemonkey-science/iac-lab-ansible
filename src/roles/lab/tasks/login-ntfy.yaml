@@ -4,7 +4,7 @@
     mode: 0755
     content: |
       #!/bin/bash
-      curl -H tags:yellow_circle -H "Title: Login: \"$USER\"" -d "Logged into \"`hostname -f`\" at `date`" ntfy.sh/CDMKY-Login > /dev/null 2>&1 || true
+      curl -H tags:yellow_circle -H "Title: Login: \"$(whoami)\"" -d "Logged into \"`hostname -f`\" at `date`" ntfy.sh/CDMKY-Login > /dev/null 2>&1 || true
 
 - name: Configure PAM to run the script at login
   lineinfile:
