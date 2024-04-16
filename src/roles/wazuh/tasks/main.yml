@@ -8,6 +8,10 @@
 - name: Wazuh - Verify package dependencies
   include_tasks: package-dependencies.yml
 
+- name: Set default value for wazuh_user_added
+  set_fact:
+    wazuh_user_added: false
+
 - name: Wazuh - Configure wazuh user and group
   include_tasks: user.yml
 
