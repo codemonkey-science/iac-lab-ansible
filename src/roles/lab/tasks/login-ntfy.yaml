@@ -4,10 +4,20 @@
     mode: 0755
     content: |
       #!/bin/bash
-      curl -H tags:yellow_circle -H "Title: Login: \"$(whoami)\"" -d "Logged into \"`hostname -f`\" at `date`" ntfy.sh/CDMKY-Login > /dev/null 2>&1 || true
+      if [ "$PAM_USER" = "root" ]; then
+          curl -H p:4 -H tags:red_circle -H "Title: Login: \"$PAM_USER\"" -d "Logged into \"`hostname -f`\" at `date`" ntfy.sh/CDMKY-Login > /dev/null 2>&1 || true
+      else
+          curl -H p:2 -H tags:yellow_circle -H "Title: Login: \"$PAM_USER\"" -d "Logged into \"`hostname -f`\" at `date`" ntfy.sh/CDMKY-Login > /dev/null 2>&1 || true
+      fi
 
 - name: Configure PAM to run the script at login
   lineinfile:
     path: /etc/pam.d/sshd
+    line: 'session    optional     pam_exec.so seteuid /usr/local/bin/login_notify.sh'
+    state: present
+
+- name: Configure PAM to run the script at login
+  lineinfile:
+    path: /etc/pam.d/sudo
     line: 'session    optional     pam_exec.so seteuid /usr/local/bin/login_notify.sh'
     state: present
