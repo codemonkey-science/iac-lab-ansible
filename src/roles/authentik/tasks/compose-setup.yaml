@@ -10,7 +10,7 @@
 - name: Check if PG_PASS exists
   shell: grep -q 'PG_PASS' /opt/authentik/.env
   register: pg_pass_exists
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Generate PG_PASS secret
   shell:
@@ -20,9 +20,30 @@
 - name: Check if AUTHENTIK_SECRET_KEY exists
   shell: grep -q 'AUTHENTIK_SECRET_KEY' /opt/authentik/.env
   register: authentik_secret_key_exists
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Generate AUTHENTIK_SECRET_KEY secret
   shell:
     cmd: echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 36)" >> /opt/authentik/.env
   when: authentik_secret_key_exists.rc != 0
+
+
+- name: Check if CF_API_EMAIL exists
+  shell: grep -q 'CF_API_EMAIL' /opt/authentik/.env
+  register: cf_api_email_exists
+  ignore_errors: true
+
+- name: Inject CF_API_EMAIL secret
+  shell:
+    cmd: echo "CF_API_EMAIL={{ CF_API_EMAIL }}" >> /opt/authentik/.env
+  when: cf_api_email_exists.rc != 0
+
+- name: Check if CF_API_KEY exists
+  shell: grep -q 'CF_API_KEY' /opt/authentik/.env
+  register: cf_api_key_exists
+  ignore_errors: true
+
+- name: Inject CF_API_KEY secret
+  shell:
+    cmd: echo "CF_API_KEY={{ CF_API_KEY }}" >> /opt/authentik/.env
+  when: cf_api_key_exists.rc != 0

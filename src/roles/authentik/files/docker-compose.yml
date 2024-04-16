@@ -11,15 +11,20 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--certificatesresolvers.myresolver.acme.email=${CF_API_EMAIL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
+#      - "--api.insecure=true"
+#      - "--api.dashboard=true"
     environment:
       CF_API_EMAIL: ${CF_API_EMAIL}
       CF_API_KEY: ${CF_API_KEY}
     ports:
       - "80:80"
       - "443:443"
+#      - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./letsencrypt:/letsencrypt"
@@ -64,7 +69,7 @@ services:
     command: server
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.authentik.rule=Host(`auth.east.codemonkey.science`)"
+      - "traefik.http.routers.authentik.rule=Host(`auth.east.codemonkey.science`) || Host(`auth.codemonkey.science`)"
       - "traefik.http.routers.authentik.entrypoints=websecure"
       - "traefik.http.routers.authentik.tls.certresolver=myresolver"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"

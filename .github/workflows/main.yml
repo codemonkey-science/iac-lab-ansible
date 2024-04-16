@@ -68,3 +68,5 @@ jobs:
       working-directory: ./src
       env:
         ANSIBLE_BECOME_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
+        CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+        CF_API_KEY: ${{ secrets.CF_API_KEY }}

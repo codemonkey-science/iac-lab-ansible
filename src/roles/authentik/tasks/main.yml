@@ -4,7 +4,7 @@
     name: authentik
     state: started
   register: service_status
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: End playbook if service is already running
   meta: end_play
