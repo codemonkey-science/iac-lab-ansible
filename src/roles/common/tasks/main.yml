@@ -11,6 +11,12 @@
         cmd: /tmp/fix-prompts.sh
         removes: /tmp/fix-prompts.sh
 
+- name: Copy update.sh script to remote host
+  ansible.builtin.copy:
+    src: files/update.sh
+    dest: /root/update.sh
+    mode: '0755'
+
 - name: Set timezone to Eastern Time
   command:
     cmd: timedatectl set-timezone America/New_York
