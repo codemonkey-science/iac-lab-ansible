@@ -12,7 +12,7 @@ status.east.codemonkey.science
 #pve1.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
 #pve2.east.codemonkey.science ansible_python_interpreter=/usr/bin/python3
 
-[lab]
+[production]
 #pve1.east.codemonkey.science
 #pve2.east.codemonkey.science
 auth.east.codemonkey.science
