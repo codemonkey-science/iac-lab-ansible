@@ -1,6 +1,5 @@
 ---
 - name: Configure login notification
-  hosts: all
   tasks:
     - name: Create login notification script
       copy:
