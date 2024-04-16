@@ -39,7 +39,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         echo "Host *\n  StrictHostKeyChecking no\n  User ${USER}\n  IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
       env:
-        USER: operations
+        USER: ${{ secrets.DEFAULT_SSH_USER }}
 
     - name: Set up Python
       uses: actions/setup-python@v5
