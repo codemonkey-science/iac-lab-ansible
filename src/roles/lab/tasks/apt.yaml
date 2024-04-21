@@ -1,10 +1,10 @@
-# - name: Change apt sources.list to point to the on-prem APT repository mirror
-#   become: true
-#   become_user: root
-#   copy:
-#     src: files/sources.list
-#     dest: /etc/apt/sources.list
-#   notify: Update apt cache
+- name: Change apt sources.list to point to the on-prem APT repository mirror
+  become: true
+  become_user: root
+  copy:
+    src: files/sources.list
+    dest: /etc/apt/sources.list
+  notify: Update apt cache
 
 - name: Install unattended-upgrades package
   become: true

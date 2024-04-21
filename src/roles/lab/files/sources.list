@@ -1,5 +1,5 @@
 # Use on-prem mirror:
-deb http://mirror.south.netcave.io/ubuntu jammy main restricted universe multiverse
-deb http://mirror.south.netcave.io/ubuntu jammy-updates main restricted universe multiverse
-deb http://mirror.south.netcave.io/ubuntu jammy-backports main restricted universe multiverse
-deb http://mirror.south.netcave.io/ubuntu jammy-security main restricted universe multiverse
+deb http://mirror.east.codemonkey.science/ubuntu/ jammy main restricted universe multiverse
+deb http://mirror.east.codemonkey.science/ubuntu/ jammy-updates main restricted universe multiverse
+deb http://mirror.east.codemonkey.science/ubuntu/ jammy-security main restricted universe multiverse
+deb http://mirror.east.codemonkey.science/ubuntu/ jammy-backports main restricted universe multiverse
