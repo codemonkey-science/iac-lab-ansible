@@ -1,0 +1,17 @@
+[Unit]
+Description=Graylog Grafana Docker Compose Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+User=graylog
+Group=graylog
+WorkingDirectory=/opt/graylog
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Alias=graylog-grafana.service

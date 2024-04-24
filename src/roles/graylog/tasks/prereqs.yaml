@@ -1,0 +1,30 @@
+---
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Install Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+
+- name: Create graylog user
+  user:
+    name: graylog
+    state: present
+
+- name: Add graylog user to docker group
+  user:
+    name: graylog
+    groups: docker
+    append: yes
+
+- name: Ensure /opt/graylog directory exists
+  file:
+    path: /opt/graylog
+    state: directory
+    owner: graylog
+    group: graylog
+    mode: '0755'

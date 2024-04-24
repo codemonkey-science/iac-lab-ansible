@@ -1,0 +1,15 @@
+---
+- name: Check if graylog-grafana service is running
+  systemd:
+    name: graylog-grafana
+    state: started
+  register: service_status
+  ignore_errors: true
+
+- name: End playbook if service is already running
+  meta: end_play
+  when: service_status is succeeded
+
+- include_tasks: prereqs.yaml
+- include_tasks: compose-setup.yaml
+- include_tasks: daemon-setup.yaml
