@@ -1,9 +1,6 @@
 ---
 version: "3.4"
 
-# For DataNode setup, graylog starts with a preflight UI, this is a change from just using OpenSearch/Elasticsearch.
-# Please take a look at the README at the top of this repo or the regular docs for more info.
-
 services:
 
   traefik:
@@ -218,6 +215,8 @@ services:
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=myresolver"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.grafana.service=grafana"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 30s
