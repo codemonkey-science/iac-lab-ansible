@@ -1,7 +1,7 @@
 ---
 - name: Copy graylog.service to remote host
   copy:
-    src: ./files/graylog.service
+    src: ./files/graylog-grafana.service
     dest: /etc/systemd/system/graylog.service
     owner: root
     group: root

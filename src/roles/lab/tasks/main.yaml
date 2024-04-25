@@ -3,5 +3,5 @@
 - name: Configure local APT repositories
   include_tasks: apt.yaml
 
-- name: Configure ntfy.sh login notifications
-  include_tasks: login-ntfy.yaml
+# - name: Configure ntfy.sh login notifications
+#   include_tasks: login-ntfy.yaml

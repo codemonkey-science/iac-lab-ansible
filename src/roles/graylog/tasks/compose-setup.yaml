@@ -1,4 +1,12 @@
 ---
+- name: Ensure .env file exists
+  file:
+    path: /opt/graylog/.env
+    state: touch
+    owner: graylog
+    group: graylog
+    mode: '0644'
+
 - name: Copy docker-compose.yml to remote host
   copy:
     src: ./files/docker-compose.yml
@@ -67,7 +75,7 @@
 
 - name: Generate GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD
   shell:
-    cmd: echo "GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD=${{ secrets.SMTP_PASSWORD}}" >> /opt/graylog/.env
+    cmd: echo "GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD={{ lookup('env', 'SMTP_PASSWORD') }}" >> /opt/graylog/.env
   when: graylog_transport_email_auth_password_exists.rc != 0
 
 - name: Check if GF_SECURITY_ADMIN_USER exists
@@ -99,7 +107,7 @@
 
 - name: Inject CF_API_EMAIL secret
   shell:
-    cmd: echo "CF_API_EMAIL={{ CF_API_EMAIL }}" >> /opt/graylog/.env
+    cmd: echo "CF_API_EMAIL={{ lookup('env', 'CF_API_EMAIL') }}" >> /opt/graylog/.env
   when: cf_api_email_exists.rc != 0
 
 - name: Check if CF_API_KEY exists
@@ -109,5 +117,20 @@
 
 - name: Inject CF_API_KEY secret
   shell:
-    cmd: echo "CF_API_KEY={{ CF_API_KEY }}" >> /opt/graylog/.env
+    cmd: echo "CF_API_KEY={{ lookup('env', 'CF_API_KEY') }}" >> /opt/graylog/.env
   when: cf_api_key_exists.rc != 0
+
+- name: Install pip3
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install Docker SDK for Python (required for docker_network module)
+  ansible.builtin.pip:
+    name: docker
+    state: present
+
+- name: Create traefik_proxy network
+  docker_network:
+    name: traefik_proxy
+    state: present

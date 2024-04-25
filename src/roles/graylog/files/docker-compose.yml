@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.heimdall.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.heimdall.rule=Host(`sim.east.codemonkey.science`) && Host(`sim.east.codemonkey.science`) && PathPrefix(`/`)"
       - "traefik.http.routers.heimdall.priority=1"
       - "traefik.http.routers.heimdall.entrypoints=websecure"
       - "traefik.http.routers.heimdall.tls.certresolver=myresolver"
@@ -168,7 +168,7 @@ services:
       - "graylog_data:/usr/share/graylog/data/data"
       - "graylog_journal:/usr/share/graylog/data/journal"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9000" ]
+      test: [ "CMD-SHELL", "curl --silent --fail http://localhost:9000/api/" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -180,7 +180,7 @@ services:
         max_attempts: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.graylog.rule=PathPrefix(`/graylog`)"
+      - "traefik.http.routers.graylog.rule=Host(`sim.east.codemonkey.science`) && PathPrefix(`/graylog`)"
       - "traefik.http.routers.graylog.priority=10"
       - "traefik.http.routers.graylog.tls.certresolver=myresolver"
       - "traefik.http.routers.graylog.middlewares=graylog3@docker,graylog2@docker,graylog@docker"
@@ -210,7 +210,7 @@ services:
       - "0.0.0.0:3030:3000"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=PathPrefix(`/grafana/`)"
+      - "traefik.http.routers.grafana.rule=Host(`sim.east.codemonkey.science`) && PathPrefix(`/grafana/`)"
       - "traefik.http.routers.grafana.priority=10"
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=myresolver"
