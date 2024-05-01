@@ -49,4 +49,17 @@ To use the playbooks and roles in this repository, you need to configure your in
 ansible-playbook src/site.yml
 ```
 
-Please refer to the individual roles for more detailed instructions and role-specific variables.
+Please refer to the individual roles for more detailed instructions and role-specific variables. The general map of what this playbook repository builds, is as follows:
+
+```mermaid
+graph TD
+    A[All Servers] --> B[common]
+    C[Proxmox Servers] --> D[proxmox]
+    E[Roles] --> F[authentik]
+    E --> G[graylog]
+    E --> H[misp]
+    E --> L[nagios]
+    E --> I[opencti]
+    E --> J[uptime-kuma]
+    E --> K[wazuh]
+```

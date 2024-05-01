@@ -1,0 +1,10 @@
+- name: Get current timezone
+  command:
+    cmd: timedatectl show --no-pager
+  register: current_timezone
+  changed_when: false
+
+- name: Set timezone to Eastern Time
+  command:
+    cmd: timedatectl set-timezone America/New_York
+  when: "'Timezone=America/New_York' not in current_timezone.stdout"

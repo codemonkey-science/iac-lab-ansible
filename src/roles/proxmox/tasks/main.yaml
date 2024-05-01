@@ -1,0 +1,23 @@
+---
+- name: Copy the script
+  copy:
+    src: remove-banner.sh
+    dest: /tmp/remove-banner.sh
+    mode: '0755'
+
+- name: Execute the script
+  command: /tmp/remove-banner.sh
+  register: script_output
+  changed_when: script_output.rc == 1
+  failed_when: script_output.rc == 2
+
+- name: Check if the script exists
+  stat:
+    path: /tmp/remove-banner.sh
+  register: script_stat
+
+- name: Delete the script
+  file:
+    path: /tmp/remove-banner.sh
+    state: absent
+  when: script_stat.stat.exists

@@ -1,0 +1,7 @@
+---
+- name: Restart rsyslogd
+  become: true
+  become_user: root
+  service:
+    name: rsyslogd
+    state: restarted

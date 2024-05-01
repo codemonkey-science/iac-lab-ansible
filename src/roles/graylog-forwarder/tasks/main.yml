@@ -10,8 +10,4 @@
     path: /etc/rsyslog.d/90-graylog.conf
     line: '*.* @sim.east.codemonkey.science:514;RSYSLOG_SyslogProtocol23Format'
     create: yes
-
-- name: Restart rsyslog to apply changes
-  systemd:
-    name: rsyslog
-    state: restarted
+  notify: Restart rsyslog
