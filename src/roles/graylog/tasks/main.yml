@@ -1,14 +1,22 @@
 ---
+- name: Gather service facts
+  ansible.builtin.service_facts:
+
+- name: Check if graylog-grafana service exists
+  set_fact:
+    service_exists: "{{ 'graylog-grafana.service' in ansible_facts['services'] }}"
+
 - name: Check if graylog-grafana service is running
   systemd:
     name: graylog-grafana
     state: started
   register: service_status
+  when: service_exists
   ignore_errors: true
 
 - name: End playbook if service is already running
   meta: end_play
-  when: service_status is succeeded
+  when: service_exists and service_status is succeeded
 
 - include_tasks: prereqs.yaml
 - include_tasks: compose-setup.yaml

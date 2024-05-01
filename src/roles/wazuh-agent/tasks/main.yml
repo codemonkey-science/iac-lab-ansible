@@ -1,40 +1,40 @@
 - name: Gather facts about wazuh-agent service
   ansible.builtin.service_facts:
 
-- name: Check if .deb file exists
-  ansible.builtin.stat:
-    path: /tmp/wazuh-agent_4.7.3-1_amd64.deb
-  register: deb_file
-  when: "'wazuh-agent' not in ansible_facts.services or ansible_facts.services['wazuh-agent'].state != 'running'"
+- name: End playbook if wazuh-agent service is already running
+  meta: end_play
+  when: "'wazuh-agent' in ansible_facts.services and ansible_facts.services['wazuh-agent'].state == 'running'"
 
-- name: Download Wazuh Agent
-  ansible.builtin.get_url:
-    url: https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.7.3-1_amd64.deb
-    dest: /tmp/wazuh-agent_4.7.3-1_amd64.deb
-  when: not deb_file.stat.exists and "'wazuh-agent' not in ansible_facts.services or ansible_facts.services['wazuh-agent'].state != 'running'"
+- name: Check if Wazuh GPG key is imported
+  ansible.builtin.shell:
+    cmd: gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --list-keys 9B3EE5F29111145 || true
+  register: gpg_key_check
+  changed_when: "'error reading key: No public key' in gpg_key_check.stderr"
 
-- name: Install Wazuh Agent
+- name: Import Wazuh GPG key
+  ansible.builtin.shell:
+    cmd: |
+      curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import
+      chmod 644 /usr/share/keyrings/wazuh.gpg
+  when: gpg_key_check.rc != 0
+
+- name: Add Wazuh repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main
+    state: present
+
+- name: Update apt and install Wazuh agent
   ansible.builtin.apt:
-    deb: /tmp/wazuh-agent_4.7.3-1_amd64.deb
-  environment:
-    WAZUH_MANAGER: "siem.east.codemonkey.science"
-    WAZUH_AGENT_NAME: "{{ ansible_fqdn }}"
-  when: "'wazuh-agent' not in ansible_facts.services or ansible_facts.services['wazuh-agent'].state != 'running'"
+    name: wazuh-agent
+    update_cache: yes
+    state: present
 
-- name: Remove .deb file
-  ansible.builtin.file:
-    path: /tmp/wazuh-agent_4.7.3-1_amd64.deb
-    state: absent
-  when: deb_file.stat.exists
-
-- name: Reload systemd manager configuration
-  ansible.builtin.systemd:
-    daemon_reload: yes
-  when: "'wazuh-agent' not in ansible_facts.services or ansible_facts.services['wazuh-agent'].state != 'running'"
+- name: Register the Wazuh agent
+  ansible.builtin.command:
+    cmd: /var/ossec/bin/agent-auth -m siem.east.codemonkey.science -A "{{ ansible_fqdn }}"
 
 - name: Enable and start wazuh-agent service
   ansible.builtin.systemd:
     name: wazuh-agent
     enabled: yes
     state: started
-  when: "'wazuh-agent' not in ansible_facts.services or ansible_facts.services['wazuh-agent'].state != 'running'"

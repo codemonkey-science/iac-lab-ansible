@@ -4,6 +4,7 @@
     src: remove-banner.sh
     dest: /tmp/remove-banner.sh
     mode: '0755'
+  changed_when: false
 
 - name: Execute the script
   command: /tmp/remove-banner.sh
@@ -21,3 +22,4 @@
     path: /tmp/remove-banner.sh
     state: absent
   when: script_stat.stat.exists
+  changed_when: false

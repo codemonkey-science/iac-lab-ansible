@@ -1,14 +1,10 @@
 ---
-- name: Check if authentik service is running
-  systemd:
-    name: authentik
-    state: started
-  register: service_status
-  ignore_errors: true
+- name: Gather facts about all services
+  ansible.builtin.service_facts:
 
-- name: End playbook if service is already running
+- name: End playbook if authentik service is already running
   meta: end_play
-  when: service_status is succeeded
+  when: "'authentik' in ansible_facts.services and ansible_facts.services['authentik'].state == 'running'"
 
 - include_tasks: prereqs.yaml
 - include_tasks: compose-setup.yaml

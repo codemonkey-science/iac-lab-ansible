@@ -35,7 +35,7 @@
 
 - name: Inject CF_API_EMAIL secret
   shell:
-    cmd: echo "CF_API_EMAIL={{ CF_API_EMAIL }}" >> /opt/authentik/.env
+    cmd: echo "CF_API_EMAIL={{ lookup('env', 'CF_API_EMAIL') }}" >> /opt/authentik/.env
   when: cf_api_email_exists.rc != 0
 
 - name: Check if CF_API_KEY exists
@@ -45,5 +45,5 @@
 
 - name: Inject CF_API_KEY secret
   shell:
-    cmd: echo "CF_API_KEY={{ CF_API_KEY }}" >> /opt/authentik/.env
+    cmd: echo "CF_API_KEY={{ lookup('env', 'CF_API_KEY') }}" >> /opt/authentik/.env
   when: cf_api_key_exists.rc != 0

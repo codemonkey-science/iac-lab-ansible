@@ -1,11 +1,27 @@
 ---
+
+- hosts: pve1.east.codemonkey.science, pve2.east.codemonkey.science
+  become: yes
+  roles:
+  - proxmox
+
 - hosts: production, proxmox
   become: yes
   roles:
   - common
   - lab
-  - wazuh-agent
-  - graylog-forwarder
+
+- hosts: siem.east.codemonkey.science
+  become: yes
+  roles:
+  - wazuh
+  - ubuntu
+
+- hosts: sim.east.codemonkey.science
+  become: yes
+  roles:
+  - graylog
+  - ubuntu
 
 - hosts: auth.east.codemonkey.science
   become: yes
@@ -25,25 +41,14 @@
   - misp
   - ubuntu
 
-- hosts: sim.east.codemonkey.science
-  become: yes
-  roles:
-  - graylog
-  - ubuntu
-
-- hosts: siem.east.codemonkey.science
-  become: yes
-  roles:
-  - wazuh
-  - ubuntu
-
 - hosts: status.east.codemonkey.science
   become: yes
   roles:
   - uptime-kuma
   - ubuntu
 
-- hosts: pve1.east.codemonkey.science, pve2.east.codemonkey.science
+- hosts: production, proxmox
   become: yes
   roles:
-  - proxmox
+  - wazuh-agent
+  - graylog-forwarder
