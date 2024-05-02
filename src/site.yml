@@ -14,19 +14,19 @@
 - hosts: siem.east.codemonkey.science
   become: yes
   roles:
-  - wazuh
+#  - wazuh
   - ubuntu
 
 - hosts: sim.east.codemonkey.science
   become: yes
   roles:
-  - graylog
+#  - graylog
   - ubuntu
 
 - hosts: auth.east.codemonkey.science
   become: yes
   roles:
-  - authentik
+#  - authentik
   - ubuntu
 
 - hosts: cti.east.codemonkey.science
@@ -44,11 +44,11 @@
 - hosts: status.east.codemonkey.science
   become: yes
   roles:
-  - uptime-kuma
+#  - uptime-kuma
   - ubuntu
 
 - hosts: production, proxmox
   become: yes
   roles:
-  - wazuh-agent
+#  - wazuh-agent
   - graylog-forwarder
