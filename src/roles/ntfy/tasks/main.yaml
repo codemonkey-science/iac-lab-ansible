@@ -1,0 +1,47 @@
+---
+- name: Check if ntfy is installed
+  command: systemctl is-active ntfy
+  register: ntfy_status
+  changed_when: false
+  ignore_errors: true
+  check_mode: no
+
+- block:
+  - name: Create /etc/apt/keyrings directory
+    file:
+      path: /etc/apt/keyrings
+      state: directory
+
+  - name: Add Heckel's GPG key
+    apt_key:
+      url: https://archive.heckel.io/apt/pubkey.txt
+      state: present
+
+  - name: Install apt-transport-https
+    apt:
+      name: apt-transport-https
+      state: present
+      update_cache: yes
+
+  - name: Add Heckel's repository
+    apt_repository:
+      repo: 'deb [arch=amd64 signed-by=/etc/apt/keyrings/archive.heckel.io.gpg] https://archive.heckel.io/apt debian main'
+      state: present
+
+  - name: Update apt and install ntfy
+    apt:
+      name: ntfy
+      state: present
+      update_cache: yes
+
+  - name: Enable ntfy service
+    systemd:
+      name: ntfy
+      enabled: yes
+
+  - name: Start ntfy service
+    systemd:
+      name: ntfy
+      state: started
+
+  when: ntfy_status.rc != 0

@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:v2.3
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesResolvers.myresolver.acme.email={{ cloudflare_email }}"
+      - "--certificatesResolvers.myresolver.acme.storage=/acme.json"
+      - "--certificatesResolvers.myresolver.acme.dnsChallenge.provider=cloudflare"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./acme.json:/acme.json"
+    networks:
+      - traefik-proxy
+
+  nagios:
+    image: jasonrivers/nagios:latest
+    environment:
+      NAGIOSADMIN_USER: admin
+      NAGIOSADMIN_PASS: nagios
+    volumes:
+      - nagios_data:/opt/nagios
+    networks:
+      - default
+      - traefik-proxy
+    labels:
+      - "traefik.http.routers.nagios.rule=Host(`{{ fqdn }}`)"
+      - "traefik.http.routers.nagios.entrypoints=websecure"
+      - "traefik.http.routers.nagios.tls.certresolver=myresolver"
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  nagios_data:

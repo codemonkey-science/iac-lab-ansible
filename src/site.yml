@@ -41,6 +41,18 @@
   - misp
   - ubuntu
 
+- hosts: monitor.east.codemonkey.science
+  become: yes
+  roles:
+  - nagios
+  - ubuntu
+
+- hosts: ntfy.east.codemonkey.science
+  become: yes
+  roles:
+  - ntfy
+  - ubuntu
+
 - hosts: status.east.codemonkey.science
   become: yes
   roles:

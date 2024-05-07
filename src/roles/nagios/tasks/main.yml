@@ -1,0 +1,25 @@
+---
+# tasks file for main execution of Nagios deployment
+- name: Gather the service facts
+  service_facts:
+
+- name: Check if Nagios service is already active
+  ansible.builtin.debug:
+    msg: "Nagios service is already installed and running."
+  when: "'nagios' in services and services['nagios'].state == 'running'"
+  register: service_check
+
+- name: Check if Nagios service is not active
+  ansible.builtin.debug:
+    msg: "Nagios service is not installed or not running."
+  when: "'nagios' not in services or services['nagios'].state != 'running'"
+  register: service_check
+
+- name: Execute deployment tasks if the service is not running
+  include_tasks: "{{ item }}"
+  with_items:
+    - prerequisites.yml
+    - user-setup.yml
+    - compose-setup.yml
+    - install-service.yml
+  when: service_check is defined

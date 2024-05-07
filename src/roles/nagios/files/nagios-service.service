@@ -1,0 +1,16 @@
+[Unit]
+Description=Nagios Monitoring Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User={{ service_user }}
+Group={{ service_group }}
+WorkingDirectory={{ service_home }}
+ExecStart=/usr/local/bin/docker-compose up -d
+ExecStop=/usr/local/bin/docker-compose down
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

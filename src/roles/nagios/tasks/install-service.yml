@@ -1,0 +1,19 @@
+---
+# tasks file for installing and managing the Nagios SystemD service
+- name: Copy SystemD service file
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/nagios-service.service"
+    dest: "/etc/systemd/system/nagios.service"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+
+- name: Reload SystemD
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start Nagios service
+  ansible.builtin.systemd:
+    name: nagios
+    enabled: yes
+    state: started

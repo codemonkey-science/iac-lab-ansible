@@ -1,0 +1,25 @@
+---
+# tasks file for setting up Docker Compose environment
+- name: Create service directory
+  ansible.builtin.file:
+    path: "{{ service_home }}"
+    state: directory
+    owner: "{{ service_user }}"
+    group: "{{ service_group }}"
+    mode: '0755'
+
+- name: Copy Docker Compose file
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/docker-compose.yml"
+    dest: "{{ service_home }}/docker-compose.yml"
+    owner: "{{ service_user }}"
+    group: "{{ service_group }}"
+    mode: '0644'
+
+- name: Setup .env file
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/.env.j2"
+    dest: "{{ service_home }}/.env"
+    owner: "{{ service_user }}"
+    group: "{{ service_group }}"
+    mode: '0660'

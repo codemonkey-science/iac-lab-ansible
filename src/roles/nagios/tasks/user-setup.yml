@@ -1,0 +1,14 @@
+---
+# tasks file for setting up user and group for Nagios
+- name: Create Nagios user
+  ansible.builtin.user:
+    name: "{{ service_user }}"
+    comment: "User for Nagios Service"
+    system: yes
+    createhome: no
+
+- name: Add Nagios user to docker group
+  ansible.builtin.user:
+    name: "{{ service_user }}"
+    groups: docker
+    append: yes
